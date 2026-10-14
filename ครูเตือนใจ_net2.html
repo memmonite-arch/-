@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ครูเตือนใจ.net| งานของฉัน</title>
+<style>
+:root{--navy:#17365d;--blue:#2563eb;--bg:#f3f6fb;--ink:#1f2937;--muted:#64748b;--line:#e2e8f0;--green:#15803d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:"Segoe UI",Tahoma,sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,#17365d,#2563eb);color:white;padding:28px 20px}
+.wrap{max-width:1000px;margin:auto}header h1{margin:0 0 8px;font-size:clamp(25px,4vw,36px)}header p{margin:0;color:#dbeafe}
+main{max-width:1000px;margin:22px auto;padding:0 16px 40px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px #0f172a08}
+.stat span{color:var(--muted);font-size:14px}.stat strong{display:block;font-size:29px;margin-top:5px;color:var(--navy)}
+.layout{display:grid;grid-template-columns:330px 1fr;gap:16px;align-items:start}
+h2{font-size:19px;margin:0 0 15px}.field{margin-bottom:12px}label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#475569}
+input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;font:inherit;background:white;color:var(--ink)}
+textarea{resize:vertical;min-height:75px}button{font:inherit;border:0;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:600}
+.primary{background:var(--blue);color:white;width:100%;padding:12px}.primary:hover{background:#1d4ed8}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.toolbar select{flex:1;min-width:125px}
+.task{border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:10px;display:flex;gap:11px;align-items:flex-start}
+.task.done{background:#f8fafc}.task.done .task-title{text-decoration:line-through;color:#94a3b8}
+.task input[type=checkbox]{width:18px;height:18px;margin-top:3px;accent-color:var(--green)}
+.task-content{flex:1;min-width:0}.task-title{font-weight:700;overflow-wrap:anywhere}.meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--muted)}
+.tag{background:#eff6ff;color:#1d4ed8;padding:3px 8px;border-radius:20px}.priority-สูง{background:#fee2e2;color:#b91c1c}.priority-ปานกลาง{background:#fef3c7;color:#92400e}.priority-ต่ำ{background:#dcfce7;color:#166534}
+.task-actions{display:flex;gap:5px}.small{padding:6px 8px;background:#f1f5f9;color:#334155;font-size:12px}.delete{color:#b91c1c}
+.empty{text-align:center;color:var(--muted);padding:35px 10px}.foot{color:var(--muted);font-size:12px;margin-top:14px;line-height:1.6}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:24px}.task{padding:10px}.task-actions{flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>✓ ครูเตือนใจ.net</h1><p>ธงชัย เนตรวชิรกุล นายช่างรังวัดอาวุโส</p></div></header>
+<main>
+  <section class="stats">
+    <div class="stat"><span>งานทั้งหมด</span><strong id="total">0</strong></div>
+    <div class="stat"><span>งานที่ยังไม่เสร็จ</span><strong id="pending">0</strong></div>
+    <div class="stat"><span>งานที่เสร็จแล้ว</span><strong id="completed">0</strong></div>
+  </section>
+  <div class="layout">
+    <section class="panel">
+      <h2 id="formHeading">＋ เพิ่มภารกิจใหม่</h2>
+      <form id="taskForm">
+        <div class="field"><label for="title">ผู้ขอ *</label><input id="title" required maxlength="160" placeholder="เช่น ชื่อเจ้าของที่ดิน"></div>
+        <div class="field"><label for="category">ประเภท</label><select id="category"><option>ออกโฉนด</option><option>สอบเขต</option><option>แบ่งแยก</option><option>รวมโฉนด</option><option>ภายในฝ่าย</option><option>อื่น ๆ</option></select></div>
+        <div class="field"><label for="due">กำหนดให้เตือน</label><input id="due" type="date"></div>
+        <div class="field"><label for="priority">ความสำคัญ</label><select id="priority"><option>ปานกลาง</option><option>สูง</option><option>ต่ำ</option></select></div>
+        <div class="field"><label for="notes">รายละเอียด / หมายเหตุ</label><textarea id="notes" maxlength="1000" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"></textarea></div>
+        <button class="primary" id="saveBtn" type="submit">บันทึกงาน</button>
+        <button class="small" id="cancelBtn" type="button" style="display:none;margin-top:8px;width:100%">ยกเลิกการแก้ไข</button>
+      </form>
+      <div class="foot">ข้อมูลจะบันทึกไว้ในเบราว์เซอร์บนเครื่องนี้โดยอัตโนมัติ หากล้างข้อมูลเบราว์เซอร์ ข้อมูลอาจหายได้</div>
+    </section>
+    <section class="panel">
+      <h2>รายการงานของฉัน</h2>
+      <div class="toolbar">
+        <input id="search" placeholder="ค้นหางาน..." aria-label="ค้นหางาน">
+        <select id="filter"><option value="all">งานทั้งหมด</option><option value="pending">ยังไม่เสร็จ</option><option value="done">เสร็จแล้ว</option><option value="today">กำหนดวันนี้</option><option value="overdue">เลยกำหนด</option></select>
+        <select id="sort"><option value="due">เรียงตามกำหนด</option><option value="priority">เรียงตามความสำคัญ</option><option value="new">เพิ่มล่าสุด</option></select>
+      </div>
+      <div id="tasks"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button class="small" id="exportBtn">ส่งออกข้อมูล JSON</button>
+        <button class="small" id="clearDoneBtn">ลบงานที่เสร็จแล้ว</button>
+        <button class="small" id="printBtn">พิมพ์รายการงาน</button>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='myTodoListThai_v1';
+let tasks=[], editingId=null;
+try{tasks=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(tasks))tasks=[]}catch{tasks=[]}
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){localStorage.setItem(KEY,JSON.stringify(tasks));render()}
+function resetForm(){editingId=null;$('taskForm').reset();$('formHeading').textContent='＋ เพิ่มงานใหม่';$('saveBtn').textContent='บันทึกงาน';$('cancelBtn').style.display='none'}
+$('taskForm').addEventListener('submit',e=>{
+ e.preventDefault();const title=$('title').value.trim();if(!title)return;
+ const data={title,category:$('category').value,due:$('due').value,priority:$('priority').value,notes:$('notes').value.trim()};
+ if(editingId){tasks=tasks.map(t=>t.id===editingId?{...t,...data}:t)}else{tasks.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),...data,done:false,created:Date.now()})}
+ resetForm();save();
+});
+$('cancelBtn').onclick=resetForm;
+function editTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;editingId=id;for(const k of ['title','category','due','priority','notes'])$(k).value=t[k]||'';$('formHeading').textContent='✎ แก้ไขงาน';$('saveBtn').textContent='บันทึกการแก้ไข';$('cancelBtn').style.display='block';window.scrollTo({top:0,behavior:'smooth'})}
+function removeTask(id){if(confirm('ต้องการลบงานนี้ใช่หรือไม่?')){tasks=tasks.filter(t=>t.id!==id);save()}}
+function toggleTask(id,checked){tasks=tasks.map(t=>t.id===id?{...t,done:checked}:t);save()}
+function render(){
+ $('total').textContent=tasks.length;$('pending').textContent=tasks.filter(t=>!t.done).length;$('completed').textContent=tasks.filter(t=>t.done).length;
+ const q=$('search').value.trim().toLowerCase(),f=$('filter').value,s=$('sort').value;
+ let list=tasks.filter(t=>(`${t.title} ${t.category} ${t.notes}`.toLowerCase().includes(q)));
+ list=list.filter(t=>f==='all'||(f==='pending'&&!t.done)||(f==='done'&&t.done)||(f==='today'&&t.due===today()&&!t.done)||(f==='overdue'&&t.due&&t.due<today()&&!t.done));
+ const rank={'สูง':0,'ปานกลาง':1,'ต่ำ':2};
+ list.sort((a,b)=>s==='priority'?(rank[a.priority]??1)-(rank[b.priority]??1):s==='new'?(b.created||0)-(a.created||0):((a.due||'9999') .localeCompare(b.due||'9999')));
+ if(!list.length){$('tasks').innerHTML='<div class="empty">ยังไม่มีงานในรายการนี้<br>เพิ่มงานใหม่ได้จากแบบฟอร์มด้านซ้าย</div>';return}
+ $('tasks').innerHTML=list.map(t=>`<article class="task ${t.done?'done':''}">
+ <input type="checkbox" aria-label="ทำเครื่องหมายว่าเสร็จ" ${t.done?'checked':''} onchange="toggleTask('${safe(t.id)}',this.checked)">
+ <div class="task-content"><div class="task-title">${safe(t.title)}</div>
+ ${t.notes?`<div style="font-size:13px;color:#64748b;margin-top:5px;white-space:pre-wrap">${safe(t.notes)}</div>`:''}
+ <div class="meta"><span class="tag">${safe(t.category)}</span><span class="tag priority-${safe(t.priority)}">${safe(t.priority)}</span>${t.due?`<span>📅 ${safe(t.due)}${!t.done&&t.due<today()?' · เลยกำหนด':t.due===today()?' · วันนี้':''}</span>`:''}</div></div>
+ <div class="task-actions"><button class="small" onclick="editTask('${safe(t.id)}')">แก้ไข</button><button class="small delete" onclick="removeTask('${safe(t.id)}')">ลบ</button></div></article>`).join('');
+}
+['search','filter','sort'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+$('clearDoneBtn').onclick=()=>{const n=tasks.filter(t=>t.done).length;if(n&&confirm(`ลบงานที่เสร็จแล้ว ${n} รายการใช่หรือไม่?`)){tasks=tasks.filter(t=>!t.done);save()}};
+$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(tasks,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-todo-list.json';a.click();URL.revokeObjectURL(a.href)};
+$('printBtn').onclick=()=>window.print();
+render();
+</script>
+</body></html>
